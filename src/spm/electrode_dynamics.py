@@ -11,7 +11,7 @@ def simulate_electrochemical_system(x, t, Uapp, r0, a, F_RT, D):
     dtau = tau[1] - tau[0]
     alpha0 = dtau / (2 * dx**2)
     alpha1 = dtau / (2 * dx)
-    y = np.ones(Nx) * 0.994
+    y = np.ones(Nx) * 0.992
     js = np.zeros(Ntau)
     A = np.zeros((Nx, Nx))
     B = np.zeros((Nx, Nx))
@@ -25,6 +25,7 @@ def simulate_electrochemical_system(x, t, Uapp, r0, a, F_RT, D):
     g0 = 0
     A[0, 0] = A[-1, -1] = 1
     B[0, 0] = B[-1, -1] = 1
+    ydata = np.zeros((Ntau, Nx))
     for itau in range(Ntau):
         gN = (
             -a
@@ -38,12 +39,12 @@ def simulate_electrochemical_system(x, t, Uapp, r0, a, F_RT, D):
 
         yn = np.linalg.solve(A, b)
         y = yn
-        print(y[-10:])
         js[itau] = (
             a
             * np.sqrt((1.0 - y[-1]) * (y[-1]))
             * 2
             * np.sinh(0.5 * F_RT * (Uapp[itau] - ocv_LMO(y[-1])))
         )
+        ydata[itau, :] = y
 
-    return y, js, tau, Uapp
+    return ydata, js, tau, Uapp

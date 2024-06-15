@@ -2,8 +2,6 @@ import numpy as np
 
 
 def ocv_LMO(y):
-    # if y >= 1:
-    #    y = 0.9999999  # 1未満の最大値に設定
     return np.real(
         4.19829
         + 0.0565661 * np.tanh(-14.5546 * y + 8.60942)
